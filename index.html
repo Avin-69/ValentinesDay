@@ -98,9 +98,50 @@
     .btnRow{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:14px}
     a.small{color:rgba(242,242,247,.7); font-size:12px; text-decoration:none}
     a.small:hover{color:rgba(242,242,247,.9)}
+
+    /* --- Password lock overlay --- */
+    .lock {
+      position:fixed;
+      inset:0;
+      background: var(--bg);
+      display:grid;
+      place-items:center;
+      z-index:9999;
+      padding:24px;
+    }
+    .lockCard{
+      width:min(380px, 100%);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:18px;
+      padding:22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      text-align:center;
+    }
+    .lockCard h2{margin:0 0 6px; font-size:20px}
+    .lockCard p{margin:0 0 12px; color:var(--muted)}
+    .lockCard input{
+      width:100%;
+      min-width:unset;
+    }
+    .lockErr{min-height:18px; margin-top:10px; color: rgba(255,235,235,.95)}
   </style>
 </head>
 <body>
+
+  <!-- Password Lock Screen -->
+  <div id="lockScreen" class="lock">
+    <div class="lockCard">
+      <h2>Private Access 💌</h2>
+      <p>Enter the secret password to continue</p>
+      <input id="passwordInput" type="password" placeholder="password…" autocomplete="off" />
+      <div class="row" style="justify-content:center; margin-top:12px;">
+        <button type="button" onclick="unlockSite()">Unlock</button>
+      </div>
+      <div id="lockMsg" class="lockErr"></div>
+    </div>
+  </div>
+
   <div class="wrap">
     <div class="card">
       <div class="top">
@@ -119,6 +160,32 @@
   </div>
 
   <script>
+    // 🔐 SET YOUR PASSWORD HERE (change this)
+    const SITE_PASSWORD = "put-your-password-here";
+
+    function unlockSite(){
+      const inputEl = document.getElementById("passwordInput");
+      const msgEl = document.getElementById("lockMsg");
+      const v = (inputEl.value ?? "").toString();
+
+      if(v === SITE_PASSWORD){
+        document.getElementById("lockScreen").style.display = "none";
+        msgEl.textContent = "";
+        inputEl.value = "";
+      } else {
+        msgEl.textContent = "Wrong password 😈";
+        inputEl.focus();
+        inputEl.select();
+      }
+    }
+
+    // Allow Enter key on password screen
+    document.addEventListener("keydown", (e) => {
+      if(document.getElementById("lockScreen").style.display !== "none" && e.key === "Enter"){
+        unlockSite();
+      }
+    });
+
     // ✅ EDIT YOUR QUESTIONS + ANSWERS HERE
     const stages = [
       {
@@ -308,4 +375,3 @@
   </script>
 </body>
 </html>
-
