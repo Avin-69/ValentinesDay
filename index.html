@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Access Granted 💌</title>
   <style>
-    :root { --bg:#0b0b10; --card:#141420; --txt:#f2f2f7; --muted:#b7b7c7; --accent:#ff4d7d; --ok:#35d07f; --bad:#ff5c5c; }
+    :root { --bg:#0b0b10; --card:#141420; --txt:#f2f2f7; --muted:#b7b7c7; --accent:#ff4d7d; --ok:#35d07f; --bad:#ff5c5c; --gold:#f7d13a; }
     *{box-sizing:border-box}
     body{
       margin:0; min-height:100vh; display:grid; place-items:center;
@@ -14,14 +14,32 @@
                   radial-gradient(900px 600px at 80% 70%, rgba(111,76,255,.18), transparent 55%),
                   var(--bg);
       color:var(--txt); padding:24px;
+      overflow-x:hidden;
     }
-    .wrap{width:min(680px, 100%);}
+
+    /* subtle animated stars layer */
+    .stars {
+      position:fixed; inset:0; z-index:-1; pointer-events:none;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,.55), transparent 50%),
+        radial-gradient(1px 1px at 35% 72%, rgba(255,255,255,.45), transparent 50%),
+        radial-gradient(1px 1px at 62% 28%, rgba(255,255,255,.40), transparent 50%),
+        radial-gradient(1px 1px at 78% 84%, rgba(255,255,255,.50), transparent 50%),
+        radial-gradient(1px 1px at 88% 20%, rgba(255,255,255,.38), transparent 50%),
+        radial-gradient(1px 1px at 18% 88%, rgba(255,255,255,.35), transparent 50%);
+      opacity:.55;
+      animation: twinkle 3.2s ease-in-out infinite alternate;
+    }
+    @keyframes twinkle { from{opacity:.35} to{opacity:.65} }
+
+    .wrap{width:min(720px, 100%);}
     .card{
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border:1px solid rgba(255,255,255,.10);
       border-radius:18px;
       padding:22px;
       box-shadow: 0 20px 60px rgba(0,0,0,.45);
+      backdrop-filter: blur(6px);
     }
     .top{
       display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;
@@ -67,7 +85,9 @@
       color:var(--txt);
       background: linear-gradient(90deg, var(--accent), #7b61ff);
       font-weight:700;
+      transform: translateZ(0);
     }
+    button:hover{filter:brightness(1.05)}
     button.secondary{
       background: rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.12);
@@ -103,14 +123,16 @@
     .lock {
       position:fixed;
       inset:0;
-      background: var(--bg);
+      background: radial-gradient(900px 600px at 20% 10%, rgba(255,77,125,.14), transparent 55%),
+                  radial-gradient(900px 600px at 80% 70%, rgba(111,76,255,.14), transparent 55%),
+                  var(--bg);
       display:grid;
       place-items:center;
       z-index:9999;
       padding:24px;
     }
     .lockCard{
-      width:min(380px, 100%);
+      width:min(420px, 100%);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border:1px solid rgba(255,255,255,.10);
       border-radius:18px;
@@ -120,14 +142,68 @@
     }
     .lockCard h2{margin:0 0 6px; font-size:20px}
     .lockCard p{margin:0 0 12px; color:var(--muted)}
-    .lockCard input{
-      width:100%;
-      min-width:unset;
-    }
     .lockErr{min-height:18px; margin-top:10px; color: rgba(255,235,235,.95)}
+    .tinyHint{font-size:12px;color:rgba(242,242,247,.55);margin-top:8px}
+
+    /* --- Star Wars crawl --- */
+    #crawlScreen{
+      display:none;
+      position:fixed;
+      inset:0;
+      background:#000;
+      z-index:9998;
+      overflow:hidden;
+    }
+    #crawlFade{
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 50% 35%, rgba(255,255,255,.10), transparent 55%);
+      pointer-events:none;
+    }
+    #crawlWrap{
+      position:absolute; inset:0;
+      perspective: 420px;
+      display:flex;
+      justify-content:center;
+    }
+    #crawlText{
+      width:min(900px, 92%);
+      color: var(--gold);
+      font-weight:800;
+      font-size:22px;
+      line-height:1.75;
+      letter-spacing:.4px;
+      transform-origin: 50% 100%;
+      transform: rotateX(22deg) translateY(100%);
+      text-align:justify;
+      text-shadow: 0 0 18px rgba(247,209,58,.15);
+      will-change: transform;
+      padding-bottom: 120px;
+    }
+    #crawlControls{
+      position:absolute;
+      top:14px; right:14px;
+      display:flex; gap:10px;
+      z-index:2;
+    }
+
+    /* Sparkle overlay after YES */
+    #sparkleOverlay{
+      display:none;
+      position:fixed; inset:0;
+      z-index:9997;
+      pointer-events:none;
+      background:
+        radial-gradient(600px 420px at 20% 30%, rgba(255,77,125,.18), transparent 60%),
+        radial-gradient(600px 420px at 80% 70%, rgba(111,76,255,.16), transparent 60%),
+        radial-gradient(900px 600px at 50% 50%, rgba(255,255,255,.06), transparent 62%);
+      animation: glowPulse 1.9s ease-in-out infinite alternate;
+    }
+    @keyframes glowPulse { from { opacity:.35 } to { opacity:.85 } }
   </style>
 </head>
+
 <body>
+  <div class="stars"></div>
 
   <!-- Password Lock Screen -->
   <div id="lockScreen" class="lock">
@@ -138,14 +214,68 @@
       <div class="row" style="justify-content:center; margin-top:12px;">
         <button type="button" onclick="unlockSite()">Unlock</button>
       </div>
+      <div class="tinyHint">Hint: it’s a Modern Family reference 😉</div>
       <div id="lockMsg" class="lockErr"></div>
     </div>
   </div>
 
+  <!-- Star Wars Crawl Screen -->
+ <div id="crawlText">
+  <p style="text-align:center; font-size:18px; margin-top:40px;">EPISODE IV</p>
+  <p style="text-align:center; font-size:34px; margin:10px 0 22px;">THE GIRL I LOVE</p>
+
+  <p>
+    I met you in the MMU exam hall, and the moment I laid my eyes on you,
+    I knew something was coming.
+    I didn’t understand it yet — I just felt it.
+  </p>
+
+  <p>
+    Not long after, everything felt right.
+    I told you things I’d never told anyone before — even when you were still a stranger —
+    because with you, it felt easy. It felt real.
+  </p>
+
+  <p>
+    I’m not the most religious person, but every day I’m grateful to whatever god exists
+    for putting us in that miserable exam hall —
+    and for giving me the courage to send that follow request,
+    and reply to that note that changed everything.
+  </p>
+
+  <p>
+    And I knew I loved you that night we were arguing about whether that hot air balloon
+    was going up or coming down.
+    That shit lowkey didn’t even move — it just stayed there 😭 —
+    but somehow, in that moment, I knew.
+    I knew I loved you.
+  </p>
+
+  <p>
+    And from that day on, I knew I would love you forever — till my very last breath.
+    No matter what happens. No matter where life takes us.
+    Whether we get to live our dream life together or not,
+    my love for you will never change.
+  </p>
+
+  <p style="text-align:center; margin-top:24px;">
+    I promise.
+  </p>
+</div>
+
+    </div>
+
+    <div id="crawlControls">
+      <button class="secondary" type="button" onclick="skipCrawl()">Skip</button>
+    </div>
+  </div>
+
+  <div id="sparkleOverlay"></div>
+
   <div class="wrap">
     <div class="card">
       <div class="top">
-        <div class="pill">Phase <b id="phaseNum">1</b> / <b id="phaseTotal">3</b></div>
+        <div class="pill">Phase <b id="phaseNum">1</b> / <b id="phaseTotal">5</b></div>
         <div class="pill">Status: <b id="statusTxt">Locked 🔒</b></div>
       </div>
       <div class="bar" aria-label="progress"><div id="progress"></div></div>
@@ -154,60 +284,69 @@
 
       <div style="margin-top:14px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
         <button class="secondary" id="resetBtn" type="button">Reset</button>
-        <a class="small" href="#" id="saveHint">Tip: Your progress is saved on this device.</a>
+        <a class="small" href="#" id="saveHint" onclick="return false;">Tip: Your progress is saved on this device.</a>
       </div>
     </div>
   </div>
 
   <script>
-    // 🔐 SET YOUR PASSWORD HERE (change this)
-    const SITE_PASSWORD = "coolcoolcool";
+    /* =========================
+       1) PASSWORD SETTINGS
+       ========================= */
+    // Change these to whatever you want (multiple accepted passwords)
+    // Tip: keep them lowercase here; we normalize input anyway.
+    const ACCEPTED_PASSWORDS = [
+      "alwaysphil",
+      "philisdreamy",
+      "philandclaire",
+      "loveislove"
+    ];
 
-    function unlockSite(){
-      const inputEl = document.getElementById("passwordInput");
-      const msgEl = document.getElementById("lockMsg");
-      const v = (inputEl.value ?? "").toString();
-
-      if(v === SITE_PASSWORD){
-        document.getElementById("lockScreen").style.display = "none";
-        msgEl.textContent = "";
-        inputEl.value = "";
-      } else {
-        msgEl.textContent = "Wrong password 😈";
-        inputEl.focus();
-        inputEl.select();
-      }
-    }
-
-    // Allow Enter key on password screen
-    document.addEventListener("keydown", (e) => {
-      if(document.getElementById("lockScreen").style.display !== "none" && e.key === "Enter"){
-        unlockSite();
-      }
-    });
-
-    // ✅ EDIT YOUR QUESTIONS + ANSWERS HERE
+    /* =========================
+       2) PERSONAL QUESTIONS
+       ========================= */
     const stages = [
       {
-        title: "Checkpoint 1",
-        prompt: "What’s our secret nickname for each other? (lowercase is fine)",
-        hint: "It’s the one you always use in texts 👀",
-        answer: ["babe", "bb"]
+        title: "Level 1 💋",
+        prompt: 'What was the "date" of our first kiss?',
+        hint: "Any date format works 😉",
+        answer: (val) => dateMatches(val, { d: 6, m: 1, y: 2024 })
       },
       {
-        title: "Checkpoint 2",
-        prompt: "Where did we first meet? (one word is enough)",
-        hint: "Think location, not the date.",
-        answer: (val) => val.includes("campus") || val.includes("mmu")
+        title: "Level 2 🛌",
+        prompt: "When did we have our first sleepover?",
+        hint: "Any date format works 😌",
+        answer: (val) => dateMatches(val, { d: 13, m: 2, y: 2024 })
       },
       {
-        title: "Checkpoint 3",
-        prompt: "Finish this sentence: “You + me = ____”",
-        hint: "Cheesy answer accepted 😭",
-        answer: ["forever", "us", "love"]
+        title: "Level 3 🐕",
+        prompt: "What dog are we getting?",
+        hint: "Big. Strong. Loyal.",
+        answer: (val) => norm(val).includes("cane") && norm(val).includes("corso")
+      },
+      {
+        title: "Level 4 🚗",
+        prompt: "What is the fastest, most beautiful car in the world — and our wedding car?",
+        hint: "Clue: MBX 1325 😉",
+        answer: (val) => {
+          const v = norm(val);
+          return v.includes("pundenator") || (v.includes("mbx") && v.includes("1325"));
+        }
+      },
+      {
+        title: "Final Level 💖",
+        prompt: "Who is the most beautiful and perfect girl in the world who I can't picture a life without?",
+        hint: "Clue: looks like the baddie Geethanjali 😌",
+        answer: (val) => {
+          const v = norm(val);
+          return v.includes("shriyaanash") || v.includes("sharmanash");
+        }
       }
     ];
 
+    /* =========================
+       3) APP LOGIC
+       ========================= */
     const els = {
       phaseNum: document.getElementById("phaseNum"),
       phaseTotal: document.getElementById("phaseTotal"),
@@ -217,10 +356,13 @@
       resetBtn: document.getElementById("resetBtn"),
     };
 
-    const STORAGE_KEY = "valentine_quiz_gate_v1";
+    const STORAGE_KEY = "valentine_quiz_gate_v2";
     const state = loadState();
-
     els.phaseTotal.textContent = stages.length.toString();
+
+    function norm(s){
+      return (s ?? "").toString().trim().toLowerCase().replace(/\s+/g," ");
+    }
 
     function loadState(){
       try{
@@ -234,22 +376,163 @@
     function saveState(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
-    function normalize(s){
-      return (s ?? "").toString().trim().toLowerCase().replace(/\s+/g," ");
+
+    // Robust date matching: accepts "6-1-2024", "06/01/2024", "2024-01-06", "6 Jan 2024", "January 6 2024", etc.
+    function dateMatches(input, target){
+      const raw = (input ?? "").toString().trim();
+      if(!raw) return false;
+
+      // If they typed numbers: extract digits groups
+      const digits = raw.match(/\d+/g);
+      if(digits && digits.length >= 3){
+        // Try interpret common patterns
+        const a = parseInt(digits[0],10);
+        const b = parseInt(digits[1],10);
+        const c = parseInt(digits[2],10);
+
+        // yyyy-mm-dd
+        if(digits[0].length === 4){
+          return (a === target.y && b === target.m && c === target.d);
+        }
+        // dd-mm-yyyy or mm-dd-yyyy (we'll accept both if unambiguous)
+        // We prefer dd-mm-yyyy, but accept mm-dd-yyyy too.
+        const dd1 = a, mm1 = b, yy1 = c;
+        const dd2 = b, mm2 = a, yy2 = c;
+
+        const ok1 = (yy1 === target.y && mm1 === target.m && dd1 === target.d);
+        const ok2 = (yy2 === target.y && mm2 === target.m && dd2 === target.d);
+        return ok1 || ok2;
+      }
+
+      // If they typed month names
+      const v = norm(raw).replace(/[,]/g," ");
+      const months = {
+        jan:1, january:1,
+        feb:2, february:2,
+        mar:3, march:3,
+        apr:4, april:4,
+        may:5,
+        jun:6, june:6,
+        jul:7, july:7,
+        aug:8, august:8,
+        sep:9, sept:9, september:9,
+        oct:10, october:10,
+        nov:11, november:11,
+        dec:12, december:12
+      };
+
+      const parts = v.split(/\s+/).filter(Boolean);
+      let m = null, d = null, y = null;
+
+      for(const p of parts){
+        if(months[p] != null) m = months[p];
+        else if(/^\d{4}$/.test(p)) y = parseInt(p,10);
+        else if(/^\d{1,2}$/.test(p)) {
+          const n = parseInt(p,10);
+          // guess day if not set
+          if(d == null) d = n;
+        }
+      }
+
+      if(m != null && d != null && y != null){
+        return (m === target.m && d === target.d && y === target.y);
+      }
+
+      // Also accept "jan62024" style
+      const compact = v.replace(/\s/g,"");
+      for(const key of Object.keys(months)){
+        if(compact.startsWith(key)){
+          const rest = compact.slice(key.length);
+          const nums = rest.match(/\d+/g);
+          if(nums && nums.length >= 2){
+            const dd = parseInt(nums[0],10);
+            const yy = parseInt(nums[1],10);
+            return (months[key] === target.m && dd === target.d && yy === target.y);
+          }
+        }
+      }
+
+      return false;
     }
 
     function isCorrect(stage, userInput){
-      const v = normalize(userInput);
-
-      if(typeof stage.answer === "function"){
-        return !!stage.answer(v);
-      }
-      if(Array.isArray(stage.answer)){
-        return stage.answer.map(normalize).includes(v);
-      }
-      return normalize(stage.answer) === v;
+      const v = norm(userInput);
+      if(typeof stage.answer === "function") return !!stage.answer(v);
+      if(Array.isArray(stage.answer)) return stage.answer.map(norm).includes(v);
+      return norm(stage.answer) === v;
     }
 
+    function escapeHtml(str){
+      return (str ?? "").toString()
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    /* =========================
+       4) PASSWORD + CRAWL
+       ========================= */
+    function unlockSite(){
+      const inputEl = document.getElementById("passwordInput");
+      const msgEl = document.getElementById("lockMsg");
+
+      const entered = norm(inputEl.value).replace(/\s/g,"");
+      const ok = ACCEPTED_PASSWORDS.map(p => norm(p).replace(/\s/g,"")).includes(entered);
+
+      if(ok){
+        document.getElementById("lockScreen").style.display = "none";
+        msgEl.textContent = "";
+        inputEl.value = "";
+        showCrawl();
+      } else {
+        msgEl.textContent = "Wrong password 😈";
+        inputEl.focus();
+        inputEl.select();
+      }
+    }
+
+    document.addEventListener("keydown", (e) => {
+      const lockVisible = document.getElementById("lockScreen").style.display !== "none";
+      if(lockVisible && e.key === "Enter") unlockSite();
+    });
+
+    let crawlTimer = null;
+
+    function showCrawl(){
+      const crawl = document.getElementById("crawlScreen");
+      crawl.style.display = "block";
+
+      const text = document.getElementById("crawlText");
+      text.style.transition = "none";
+      text.style.transform = "rotateX(22deg) translateY(100%)";
+
+      // restart animation next frame
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          text.style.transition = "transform 24s linear";
+          text.style.transform = "rotateX(22deg) translateY(-230%)";
+        });
+      });
+
+      // auto-skip at end
+      if(crawlTimer) clearTimeout(crawlTimer);
+      crawlTimer = setTimeout(skipCrawl, 24500);
+    }
+
+    function skipCrawl(){
+      const crawl = document.getElementById("crawlScreen");
+      if(crawl) crawl.style.display = "none";
+      if(crawlTimer) clearTimeout(crawlTimer);
+    }
+
+    window.unlockSite = unlockSite;
+    window.skipCrawl = skipCrawl;
+
+    /* =========================
+       5) RENDER UI
+       ========================= */
     function render(){
       const done = state.step >= stages.length;
       const phase = Math.min(state.step, stages.length - 1);
@@ -268,11 +551,30 @@
             <h1 style="font-size:26px; margin-top:6px;">Will you be my Valentine?</h1>
             <div class="btnRow">
               <button type="button" onclick="celebrate()">YES 💖</button>
-              <button type="button" class="secondary" onclick="tease()">no</button>
+              <button id="noBtn" type="button" class="secondary" onclick="tease()">no</button>
             </div>
             <p id="finalMsg" style="margin-top:12px;"></p>
           </div>
         `;
+
+        const noBtn = document.getElementById("noBtn");
+        if(noBtn){
+          noBtn.addEventListener("mouseenter", () => {
+            const dx = (Math.random()*2 - 1) * 18;
+            const dy = (Math.random()*2 - 1) * 10;
+            noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+          });
+          noBtn.addEventListener("mouseleave", () => {
+            noBtn.style.transform = "translate(0,0)";
+          });
+        }
+
+        // smooth entrance
+        els.content.animate(
+          [{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }],
+          { duration: 320, easing: "ease-out" }
+        );
+
         return;
       }
 
@@ -296,6 +598,12 @@
         </div>
       `;
 
+      // smooth entrance
+      els.content.animate(
+        [{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }],
+        { duration: 280, easing: "ease-out" }
+      );
+
       const input = document.getElementById("answerInput");
       const msg = document.getElementById("msg");
       const submit = document.getElementById("submitBtn");
@@ -312,7 +620,7 @@
           msg.textContent = "Correct ✅ Unlocking next phase…";
           state.step += 1;
           saveState();
-          setTimeout(render, 550);
+          setTimeout(render, 520);
         }else{
           msg.className = "msg bad";
           msg.textContent = "Nope 😈 try again.";
@@ -325,33 +633,31 @@
       input.focus();
     }
 
-    function escapeHtml(str){
-      return (str ?? "").toString()
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
     els.resetBtn.addEventListener("click", ()=>{
       localStorage.removeItem(STORAGE_KEY);
       state.step = 0;
       render();
     });
 
+    /* =========================
+       6) YES CELEBRATION
+       ========================= */
     window.celebrate = function(){
       const el = document.getElementById("finalMsg");
-      el.textContent = "YAYYYYY 💞 I’m taking you out. (No refunds.)";
+      el.textContent = "YAYYYYY 💞 Okay… it’s official. You’re my Valentine. I love you.";
+
+      document.getElementById("sparkleOverlay").style.display = "block";
       confettiBurst();
+      fireworks(7);
     }
+
     window.tease = function(){
       const el = document.getElementById("finalMsg");
       el.textContent = "Wrong button bestie 😭 try again.";
     }
 
     function confettiBurst(){
-      for(let i=0;i<80;i++){
+      for(let i=0;i<90;i++){
         const s = document.createElement("span");
         s.textContent = ["✨","💖","💘","🌸","⭐️"][Math.floor(Math.random()*5)];
         s.style.position="fixed";
@@ -362,7 +668,7 @@
         s.style.transition="transform 1.6s ease, opacity 1.6s ease";
         document.body.appendChild(s);
         const dx = (Math.random()*2-1)*180;
-        const dy = 700 + Math.random()*400;
+        const dy = 700 + Math.random()*420;
         requestAnimationFrame(()=>{
           s.style.transform=`translate(${dx}px, ${dy}px) rotate(${Math.random()*360}deg)`;
           s.style.opacity="0";
@@ -371,6 +677,41 @@
       }
     }
 
+    function fireworks(bursts = 6){
+      for(let b=0; b<bursts; b++){
+        setTimeout(() => fireworkOnce(), b * 650);
+      }
+    }
+
+    function fireworkOnce(){
+      const cx = Math.random() * window.innerWidth;
+      const cy = 80 + Math.random() * (window.innerHeight * 0.45);
+
+      for(let i=0;i<40;i++){
+        const p = document.createElement("span");
+        p.textContent = ["✨","💖","💫","⭐️","🎆","💘"][Math.floor(Math.random()*6)];
+        p.style.position="fixed";
+        p.style.left=cx+"px";
+        p.style.top=cy+"px";
+        p.style.fontSize=(12+Math.random()*18)+"px";
+        p.style.pointerEvents="none";
+        document.body.appendChild(p);
+
+        const angle = (i/40) * Math.PI * 2;
+        const r = 90 + Math.random()*170;
+        const dx = Math.cos(angle) * r;
+        const dy = Math.sin(angle) * r;
+
+        p.animate([
+          { transform:"translate(0,0) scale(1)", opacity:1 },
+          { transform:`translate(${dx}px, ${dy}px) scale(0.85)`, opacity:0 }
+        ], { duration: 950 + Math.random()*450, easing:"cubic-bezier(.2,.8,.2,1)" });
+
+        setTimeout(()=>p.remove(), 1500);
+      }
+    }
+
+    // Start
     render();
   </script>
 </body>
