@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Access Granted 💌</title>
+  <title>Valentine Verification 💌</title>
   <style>
     :root { --bg:#0b0b10; --card:#141420; --txt:#f2f2f7; --muted:#b7b7c7; --accent:#ff4d7d; --ok:#35d07f; --bad:#ff5c5c; --gold:#f7d13a; }
     *{box-sizing:border-box}
@@ -54,8 +54,10 @@
     .pill b{color:var(--txt)}
     .bar{height:8px; background:rgba(255,255,255,.06); border-radius:999px; overflow:hidden; border:1px solid rgba(255,255,255,.08)}
     .bar > div{height:100%; width:0%; background:linear-gradient(90deg, var(--accent), #7b61ff); transition:width .35s ease}
+
     h1{margin:10px 0 8px; font-size:22px}
     p{margin:0 0 14px; color:var(--muted); line-height:1.45}
+
     .q{
       margin-top:14px;
       padding:16px;
@@ -66,6 +68,7 @@
     .q h2{margin:0 0 8px; font-size:18px}
     .hint{font-size:13px; color:rgba(242,242,247,.75); margin-top:8px}
     .row{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap}
+
     input{
       flex:1;
       min-width:220px;
@@ -77,6 +80,7 @@
       outline:none;
     }
     input:focus{border-color: rgba(255,77,125,.55); box-shadow:0 0 0 4px rgba(255,77,125,.15)}
+
     button{
       padding:12px 14px;
       border:none;
@@ -94,6 +98,7 @@
       color:var(--muted);
       font-weight:600;
     }
+
     .msg{
       margin-top:12px;
       padding:10px 12px;
@@ -105,10 +110,8 @@
     }
     .msg.ok{display:block; border-color: rgba(53,208,127,.35); background: rgba(53,208,127,.10); color: rgba(235,255,245,.95)}
     .msg.bad{display:block; border-color: rgba(255,92,92,.35); background: rgba(255,92,92,.10); color: rgba(255,235,235,.95)}
-    .final{
-      text-align:center;
-      padding:18px;
-    }
+
+    .final{ text-align:center; padding:18px; }
     .heart{
       font-size:40px;
       filter: drop-shadow(0 10px 20px rgba(255,77,125,.25));
@@ -214,55 +217,50 @@
       <div class="row" style="justify-content:center; margin-top:12px;">
         <button type="button" onclick="unlockSite()">Unlock</button>
       </div>
-      <div class="tinyHint">Hint: Which Fictional Couple are we? or which song is about us? 😉</div>
+      <div class="tinyHint">Hint: Which fictional couple are we? / which song is about us? 😉</div>
       <div id="lockMsg" class="lockErr"></div>
     </div>
   </div>
 
   <!-- Star Wars Crawl Screen -->
- <div id="crawlText">
-  <p style="text-align:center; font-size:18px; margin-top:40px;">EPISODE IV</p>
-  <p style="text-align:center; font-size:34px; margin:10px 0 22px;">THE GIRL I LOVE</p>
+  <div id="crawlScreen">
+    <div id="crawlFade"></div>
 
-  <p>
-    I met you in the MMU exam hall, and the moment I laid my eyes on you,
-    I knew something was coming.
-    I didn’t understand it yet — I just felt it.
-  </p>
+    <div id="crawlWrap">
+      <div id="crawlText">
+        <p style="text-align:center; font-size:18px; margin-top:40px;">EPISODE IV</p>
+        <p style="text-align:center; font-size:34px; margin:10px 0 22px;">THE GIRL I LOVE</p>
 
-  <p>
-    Not long after, everything felt right.
-    I told you things I’d never told anyone before — even when you were still a stranger —
-    because with you, it felt easy. It felt real.
-  </p>
+        <p>
+          I met you in the MMU exam hall, and the moment I laid my eyes on you,
+          I knew something was coming. I didn’t understand it yet — I just felt it.
+        </p>
 
-  <p>
-    I’m not the most religious person, but every day I’m grateful to whatever god exists
-    for putting us in that miserable exam hall —
-    and for giving me the courage to send that follow request,
-    and reply to that note that changed everything.
-  </p>
+        <p>
+          Not long after, everything felt right. I told you things I’d never told anyone before —
+          even when you were still a stranger — because with you, it felt easy. It felt real.
+        </p>
 
-  <p>
-    And I knew I loved you that night we were arguing about whether that hot air balloon
-    was going up or coming down.
-    That shit lowkey didn’t even move — it just stayed there 😭 —
-    but somehow, in that moment, I knew.
-    I knew I loved you.
-  </p>
+        <p>
+          I’m not the most religious person, but every day I’m grateful to whatever god exists
+          for putting us in that miserable exam hall — and for giving me the courage to send that follow request,
+          and reply to that note that changed everything.
+        </p>
 
-  <p>
-    And from that day on, I knew I would love you forever — till my very last breath.
-    No matter what happens. No matter where life takes us.
-    Whether we get to live our dream life together or not,
-    my love for you will never change.
-  </p>
+        <p>
+          And I knew I loved you that night we were arguing about whether that hot air balloon was going up
+          or coming down. That shit lowkey didn’t even move — it just stayed there 😭 —
+          but somehow, in that moment, I knew. I knew I loved you.
+        </p>
 
-  <p style="text-align:center; margin-top:24px;">
-    I promise.
-  </p>
-</div>
+        <p>
+          And from that day on, I knew I would love you forever — till my very last breath.
+          No matter what happens. No matter where life takes us. Whether we get to live our dream life together or not,
+          my love for you will never change.
+        </p>
 
+        <p style="text-align:center; margin-top:24px;">I promise.</p>
+      </div>
     </div>
 
     <div id="crawlControls">
@@ -284,7 +282,7 @@
 
       <div style="margin-top:14px; display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;">
         <button class="secondary" id="resetBtn" type="button">Reset</button>
-        <a class="small" href="#" id="saveHint" onclick="return false;">Tip: Your progress is saved on this device.</a>
+        <a class="small" href="#" onclick="return false;">Tip: Your progress is saved on this device.</a>
       </div>
     </div>
   </div>
@@ -293,13 +291,12 @@
     /* =========================
        1) PASSWORD SETTINGS
        ========================= */
-    // Change these to whatever you want (multiple accepted passwords)
-    // Tip: keep them lowercase here; we normalize input anyway.
+    // Stored normalized (spaces don't matter). User can type with or without spaces.
     const ACCEPTED_PASSWORDS = [
-      "silver springs",
-      "jim and pam",
-      "phil and claire",
-      "jake and amy",
+      "silversprings",
+      "jimandpam",
+      "philandclaire",
+      "jakeandamy",
       "iris"
     ];
 
@@ -357,7 +354,7 @@
       resetBtn: document.getElementById("resetBtn"),
     };
 
-    const STORAGE_KEY = "valentine_quiz_gate_v2";
+    const STORAGE_KEY = "valentine_quiz_gate_v3";
     const state = loadState();
     els.phaseTotal.textContent = stages.length.toString();
 
@@ -383,20 +380,16 @@
       const raw = (input ?? "").toString().trim();
       if(!raw) return false;
 
-      // If they typed numbers: extract digits groups
       const digits = raw.match(/\d+/g);
       if(digits && digits.length >= 3){
-        // Try interpret common patterns
         const a = parseInt(digits[0],10);
         const b = parseInt(digits[1],10);
         const c = parseInt(digits[2],10);
 
-        // yyyy-mm-dd
         if(digits[0].length === 4){
           return (a === target.y && b === target.m && c === target.d);
         }
-        // dd-mm-yyyy or mm-dd-yyyy (we'll accept both if unambiguous)
-        // We prefer dd-mm-yyyy, but accept mm-dd-yyyy too.
+
         const dd1 = a, mm1 = b, yy1 = c;
         const dd2 = b, mm2 = a, yy2 = c;
 
@@ -405,7 +398,6 @@
         return ok1 || ok2;
       }
 
-      // If they typed month names
       const v = norm(raw).replace(/[,]/g," ");
       const months = {
         jan:1, january:1,
@@ -428,18 +420,13 @@
       for(const p of parts){
         if(months[p] != null) m = months[p];
         else if(/^\d{4}$/.test(p)) y = parseInt(p,10);
-        else if(/^\d{1,2}$/.test(p)) {
-          const n = parseInt(p,10);
-          // guess day if not set
-          if(d == null) d = n;
-        }
+        else if(/^\d{1,2}$/.test(p)) { if(d == null) d = parseInt(p,10); }
       }
 
       if(m != null && d != null && y != null){
         return (m === target.m && d === target.d && y === target.y);
       }
 
-      // Also accept "jan62024" style
       const compact = v.replace(/\s/g,"");
       for(const key of Object.keys(months)){
         if(compact.startsWith(key)){
@@ -504,27 +491,29 @@
     function showCrawl(){
       const crawl = document.getElementById("crawlScreen");
       crawl.style.display = "block";
+      crawl.style.visibility = "visible";
 
       const text = document.getElementById("crawlText");
       text.style.transition = "none";
       text.style.transform = "rotateX(22deg) translateY(100%)";
 
-      // restart animation next frame
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          text.style.transition = "transform 24s linear";
-          text.style.transform = "rotateX(22deg) translateY(-230%)";
+          text.style.transition = "transform 26s linear";
+          text.style.transform = "rotateX(22deg) translateY(-235%)";
         });
       });
 
-      // auto-skip at end
       if(crawlTimer) clearTimeout(crawlTimer);
-      crawlTimer = setTimeout(skipCrawl, 24500);
+      crawlTimer = setTimeout(skipCrawl, 26500);
     }
 
     function skipCrawl(){
       const crawl = document.getElementById("crawlScreen");
-      if(crawl) crawl.style.display = "none";
+      if(crawl) {
+        crawl.style.display = "none";
+        crawl.style.visibility = "hidden";
+      }
       if(crawlTimer) clearTimeout(crawlTimer);
     }
 
@@ -570,12 +559,10 @@
           });
         }
 
-        // smooth entrance
         els.content.animate(
           [{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }],
           { duration: 320, easing: "ease-out" }
         );
-
         return;
       }
 
@@ -599,7 +586,6 @@
         </div>
       `;
 
-      // smooth entrance
       els.content.animate(
         [{ opacity: 0, transform: "translateY(10px)" }, { opacity: 1, transform: "translateY(0)" }],
         { duration: 280, easing: "ease-out" }
